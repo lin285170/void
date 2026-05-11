@@ -25,31 +25,39 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          # 使用 3.11 或 3.12 均可，3.11 对 node-gyp 的兼容性最成熟
           python-version: '3.11'
 
       - name: Install Dependencies
         run: npm install
         env:
-          # 加速 Electron 下载
           ELECTRON_MIRROR: "https://npmmirror.com/mirrors/electron/"
           npm_config_fetch_timeout: 120000
 
-      # ==========================================
-      # 新增关键步骤：必须先编译 React，生成 out 目录下的 JS 文件，
-      # 否则后续的 compile 步骤会因为找不到 React 模块而报错
-      # ==========================================
       - name: Build React UI Components
         run: npm run buildreact
 
       - name: Compile Source Code
         run: npm run compile
 
-      - name: Build Windows Archive (ZIP)
-        run: npx gulp vscode-win32-x64-archive
+      # ==========================================
+      # 修改了这里的 gulp 任务名称
+      # ==========================================
 
-      - name: Build Windows Setup (EXE)
-        run: npx gulp vscode-win32-x64-setup
+      - name: Build Windows
+        run: npx gulp vscode-win32-x64-ci
+
+      - name: Build Inno Updater
+        run: npx gulp vscode-win32-x64-inno-updater
+
+      - name: Create ZIP archive
+        run: |
+          $version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
+          New-Item -ItemType Directory -Path .build\win32-x64 -Force
+          7z.exe a -tzip ".build\win32-x64\VSCode-win32-x64-$version.zip" "..\VSCode-win32-x64\*"
+        shell: pwsh
+
+      - name: Build Windows User Setup (EXE)
+        run: npx gulp vscode-win32-x64-user-setup
 
       # 调试步骤：打印出构建产物的具体路径，方便排查上传路径是否正确
       - name: List build artifacts
@@ -61,6 +69,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            .build/win32-x64/archive/*.zip
-            .build/win32-x64/system-setup/*.exe
+            .build/win32-x64/*.zip
+            .build/win32-x64/user-setup/*.exe
           fail_on_unmatched_files: true

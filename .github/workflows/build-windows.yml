@@ -46,7 +46,7 @@ jobs:
         run: |
           $version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
           New-Item -ItemType Directory -Path .build\win32-x64 -Force
-          7z.exe a -tzip ".build\win32-x64\Void-win32-x64-$version.zip" "..\Void-win32-x64\*"
+          7z.exe a -tzip ".build\win32-x64\Void-$version-win32-x86_64.zip" "..\Void-win32-x64\*"
         shell: pwsh
 
       - name: Build Windows User Setup (EXE)
@@ -55,7 +55,7 @@ jobs:
       - name: Rename EXE to include version
         run: |
           $version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
-          Move-Item -Path ".build\win32-x64\user-setup\VoidSetup.exe" -Destination ".build\win32-x64\user-setup\Void-win32-x64-$version.exe"
+          Move-Item -Path ".build\win32-x64\user-setup\VoidSetup.exe" -Destination ".build\win32-x64\user-setup\Void-$version-win32-x86_64.exe"
         shell: pwsh
 
       # 调试步骤：打印出构建产物的具体路径，方便排查上传路径是否正确

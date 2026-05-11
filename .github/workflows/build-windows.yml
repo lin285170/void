@@ -46,7 +46,7 @@ jobs:
         run: |
           $version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
           New-Item -ItemType Directory -Path .build\win32-x64 -Force
-          7z.exe a -tzip ".build\win32-x64\VSCode-win32-x64-$version.zip" "..\VSCode-win32-x64\*"
+          7z.exe a -tzip ".build\win32-x64\Void-win32-x64-$version.zip" "..\Void-win32-x64\*"
         shell: pwsh
 
       - name: Build Windows User Setup (EXE)

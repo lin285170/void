@@ -36,15 +36,8 @@ jobs:
       - name: Build React UI Components
         run: npm run buildreact
 
-      - name: Compile Source Code
-        run: npm run compile
-
-      # ==========================================
-      # 修改了这里的 gulp 任务名称
-      # ==========================================
-
       - name: Build Windows
-        run: npx gulp vscode-win32-x64-ci
+        run: npx gulp vscode-win32-x64
 
       - name: Build Inno Updater
         run: npx gulp vscode-win32-x64-inno-updater

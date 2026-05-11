@@ -22,12 +22,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # VS Code 系项目推荐使用 18 或 20
+          node-version: '24'
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # node-gyp 需要 Python
+          python-version: '3.12' # node-gyp 需要 Python
 
       - name: Install Yarn
         run: npm install -g yarn

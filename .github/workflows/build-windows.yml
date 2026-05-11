@@ -52,6 +52,12 @@ jobs:
       - name: Build Windows User Setup (EXE)
         run: npx gulp vscode-win32-x64-user-setup
 
+      - name: Rename EXE to include version
+        run: |
+          $version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
+          Move-Item -Path ".build\win32-x64\user-setup\VoidSetup.exe" -Destination ".build\win32-x64\user-setup\Void-win32-x64-$version.exe"
+        shell: pwsh
+
       # 调试步骤：打印出构建产物的具体路径，方便排查上传路径是否正确
       - name: List build artifacts
         run: |
